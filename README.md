@@ -65,12 +65,12 @@ The server will start on [http://0.0.0.0:5000/radio](http://0.0.0.0:5000/radio).
 
 ## TODO:
 
-<br>[] Implement configuration files for usage simplicity
-<br>[] Add functionality of shuffling upon request
-<br>[] Create endpoint with ID to create unique hosting session
-<br>[] Create endpoints to return metadata of current track and next track
-<br>[] Create a request endpoint which takes in links from supported sites
-<br>[] Create tests for checking state of endpoints
+- [ ] Implement configuration files for usage simplicity
+- [ ] Add functionality of shuffling upon request
+- [ ] Create endpoint with ID to create unique hosting session
+- [ ] Create endpoints to return metadata of current track and next track
+- [ ] Create a request endpoint which takes in links from supported sites
+- [ ] Create tests for checking state of endpoints
 
 ## Contributing
 
