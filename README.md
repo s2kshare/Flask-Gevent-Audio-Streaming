@@ -27,8 +27,51 @@ Python 3.8+
 
 ## Installation
 
-1. Clone this repository
+1. Clone this repository simply by running the following command: <i>(be sure to have git installed)</i>
 
 ```sh
-
+git clone https://github.com/s2kshare/Flask-Gevent-Audio-Streaming.git
+cd Flask-Gevent-Audio-Streaming
 ```
+
+2. Navigate dependencies:
+
+```sh
+pip install -r requirements.txt
+```
+
+3. Create an `audios/` directory within the root folder and add your selected MP3 files:
+
+```sh
+mkdir audios
+```
+
+## Usage
+
+Running the flask application is pretty easy!
+Just pop open a terminal / command prompt and run this command in root:
+
+```sh
+python app.py
+```
+
+The server will start on [http://0.0.0.0:5000/radio](http://0.0.0.0:5000/radio). Clients can connect to this endpoint to listen to the stream!
+
+# API
+
+- `GET /radio`
+  - This endpoint streams audio in real-time
+  - Response MIME type: `audio/mpeg`
+
+## TODO:
+
+<br>[] Implement configuration files for usage simplicity
+<br>[] Add functionality of shuffling upon request
+<br>[] Create endpoint with ID to create unique hosting session
+<br>[] Create endpoints to return metadata of current track and next track
+<br>[] Create a request endpoint which takes in links from supported sites
+<br>[] Create tests for checking state of endpoints
+
+## Contributing
+
+Feel free to submit pull requests or open issues for improvements!
