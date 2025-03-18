@@ -1,2 +1,7 @@
-audios/
+Radio-Backend/audios/
+Radio-Backend/.venv
+
+React-Example/node_modules
+
 .venv
+.vscode

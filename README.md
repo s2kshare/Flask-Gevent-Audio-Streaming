@@ -1,14 +1,9 @@
 # Flask Gevent Audio Streaming
 
-> Heya, how's it?
-
 ## Background
 
-During a discord call with the boys, a friend of mine (new to programming) was having trouble trying to build a radio station API. He mentioned that he's been going at it for a days and he just cant seem to crack it, so I asked if I could assist him.
-
-After talking back and forward for a bit and reading over his source, he felt discouraged and decided to discard the project entirely. He seemed really excited about this specific project and I wanted to help him get back on track with developing this.
-
-So I decided to make this repository for anyone else who could possibly be in the same position. Hopefully this can help whoever is new to python or new to trying flask!
+I don't have anything on my GitHub so I'm building this project and I always wondered how to a stream of some sort.
+If there's anything you would recommend with my code Feel free to submit a pull request
 
 ## Features
 
@@ -25,13 +20,13 @@ Python 3.8+
     gevent
 ```
 
-## Installation
+## Usage
 
 1. Clone this repository simply by running the following command: <i>(be sure to have git installed)</i>
 
 ```sh
 git clone https://github.com/s2kshare/Flask-Gevent-Audio-Streaming.git
-cd Flask-Gevent-Audio-Streaming
+cd Flask-Gevent-Audio-Streaming/Radio-Backend
 ```
 
 2. Navigate dependencies:
@@ -46,10 +41,7 @@ pip install -r requirements.txt
 mkdir audios
 ```
 
-## Usage
-
-Running the flask application is pretty easy!
-Just pop open a terminal / command prompt and run this command in root:
+4. Running the flask application is pretty easy! Just run the following:
 
 ```sh
 python app.py
