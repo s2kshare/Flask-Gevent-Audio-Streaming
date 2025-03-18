@@ -1,46 +1,81 @@
+from flask import Flask, Response
+from gevent.pywsgi import WSGIServer
+from gevent.queue import Queue
+from gevent import monkey, spawn
 import os
-import random
-import subprocess
+import time
 
-from flask import Flask, Response, stream_with_context
+# Patch standard library for gevent compatibility
+monkey.patch_all()  
 
 app = Flask(__name__)
 
-# Audio Directory
-AUDIO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'audios')
-if not os.path.exists(AUDIO_DIR):
-    os.makedirs(AUDIO_DIR)
+# ===== CONFIGURATION =====
 
-def get_audio_files():
-    return [os.path.join(AUDIO_DIR, f) for f in os.listdir(AUDIO_DIR) if f.endswith('.mp3')]
+AUDIO_DIR = "./audios/"
+PLAYLIST = sorted([os.path.join(AUDIO_DIR, f) for f in os.listdir(AUDIO_DIR) if f.endswith(".mp3")])
+if not PLAYLIST:
+    raise Exception("No MP3 files found in the audio directory")
 
-def generate_audio():
+# ===== GLOBAL STATE =====
+
+current_song_index = 0
+clients = []
+chunk_queue = Queue(maxsize=10)
+
+# ===== BACKGROUND STREAMING GREENLET =====
+
+def audio_stream():
+    """Continuously stream audio from the playlist."""
+    global current_song_index
+
     while True:
-        audio_files = get_audio_files()
-        if not audio_files:
-            break
+        file_path = PLAYLIST[current_song_index]
+        timestamp = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
+        print(f"{timestamp} > [RADIO]: Now Streaming {file_path}")
 
-        random.shuffle(audio_files)
+        with open(file_path, "rb") as f:
+            while chunk := f.read(4096):
+                if chunk_queue.full():
+                    chunk_queue.get()
+                chunk_queue.put(chunk)
+                time.sleep(0.1)  # Control playback speed (simulates real-time playback)
+        
+        # Move to the next song
+        current_song_index = (current_song_index + 1) % len(PLAYLIST)
 
-        for file in audio_files:
-            process = subprocess.Popen(
-                ["ffmpeg", "-re", "-i", file, "-f", "mp3", "-"],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.DEVNULL,
-                bufsize=4096
-            )
-            try:
-                while True:
-                    chunk = process.stdout.read(4096)
-                    if not chunk:
-                        break
-                    yield chunk
-            finally:
-                process.terminate()
+# Start the audio streaming in a greenlet
+spawn(audio_stream)
 
-@app.route('/stream')
-def stream():
-    return Response(stream_with_context(generate_audio()), mimetype='audio/mpeg')
+# ===== STREAMING ROUTE =====
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, threaded=True)
+def client_generator():
+    """Clients tap into the running audio stream."""
+    q = Queue()
+    clients.append(q)
+    try:
+        while True:
+            yield q.get()
+    finally:
+        clients.remove(q)
+
+# Broadcast chunks to all clients
+
+def broadcast_audio():
+    """Distribute audio chunks to all connected clients."""
+    while True:
+        chunk = chunk_queue.get()
+        for client in clients[:]:
+            client.put(chunk)
+
+spawn(broadcast_audio)
+
+# ===== API ROUTES =====
+
+@app.route("/radio")
+def radio_stream():
+    """Live Radio Stream Endpoint"""
+    return Response(client_generator(), mimetype="audio/mpeg")
+
+if __name__ == "__main__":
+    WSGIServer(("0.0.0.0", 5000), app).serve_forever()
