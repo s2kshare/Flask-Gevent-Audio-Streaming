@@ -2,7 +2,7 @@
 
 ## Background
 
-I don't have anything on my GitHub so I'm building this project and I always wondered how to a stream of some sort.
+I don't have anything on my GitHub so I'm building this project! I always wondered how to build a stream of some sort.
 If there's anything you would recommend with my code Feel free to submit a pull request
 
 ## Features
@@ -57,6 +57,7 @@ The server will start on [http://0.0.0.0:5000/radio](http://0.0.0.0:5000/radio).
 
 ## TODO:
 
+- [ ] Implement varying audio file types
 - [ ] Implement configuration files for usage simplicity
 - [ ] Add functionality of shuffling upon request
 - [ ] Create endpoint with ID to create unique hosting session

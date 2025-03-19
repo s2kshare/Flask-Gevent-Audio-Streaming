@@ -1,7 +1,11 @@
-Radio-Backend/audios/
-Radio-Backend/.venv
-
-React-Example/node_modules
-
+# Root Directory
 .venv
 .vscode
+
+# Backend Related
+Radio-Backend/audios/
+Radio-Backend/.venv
+Radio-Backend/__pycache__
+
+# Frontend Related
+React-Example/node_modules
